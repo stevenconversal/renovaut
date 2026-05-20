@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renovaut · Domeinstrategie · Conversal Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-light: #5FD1A4;
+    --green-dark: #0F2820;
+    --green-soft: rgba(29, 158, 117, 0.12);
+    --ink: #0F1B17;
+    --ink-2: #D4DDDA;
+    --ink-3: #8FA39D;
+    --ink-4: #5C6864;
+    --line: #2A3935;
+    --line-soft: #1F2C28;
+    --bg: #0A1411;
+    --panel: #131F1B;
+    --panel-2: #1A2823;
+    --red: #F08585;
+    --amber: #F5C361;
+    --blue: #6FAEEC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg); color: var(--ink-2);
+    line-height: 1.55; font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: rgba(19, 31, 27, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .logo {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-weight: 700; font-size: 16px; color: white;
+    letter-spacing: -0.01em;
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    background: var(--green);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: var(--green-dark);
+  }
+  .header-meta {
+    font-size: 13px; color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .header-meta span { color: var(--green-light); }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1280px; margin: 0 auto;
+    padding: 64px 48px 120px;
+  }
+  section { margin-bottom: 88px; scroll-margin-top: 80px; }
+  section:last-child { margin-bottom: 0; }
+
+  /* HERO */
+  .hero {
+    display: grid; grid-template-columns: 1.3fr 1fr;
+    gap: 56px; align-items: center;
+    padding: 24px 0 48px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green-soft);
+    color: var(--green-light);
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    margin-bottom: 24px;
+    border: 1px solid rgba(29, 158, 117, 0.25);
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--green-light); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1 {
+    font-size: 52px; font-weight: 700;
+    letter-spacing: -0.03em; line-height: 1.05;
+    color: white; margin-bottom: 24px;
+  }
+  h1 em {
+    color: var(--green-light);
+    font-style: normal;
+  }
+  .hero-lead {
+    font-size: 18px; color: var(--ink-3); line-height: 1.6;
+    max-width: 540px;
+  }
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: radial-gradient(circle at 30% 30%, var(--green-soft) 0%, transparent 60%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .domain-orb {
+    position: absolute;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .orb-1 {
+    width: 220px; height: 220px;
+    top: 12%; left: 8%;
+    background: linear-gradient(135deg, var(--panel) 0%, var(--green-dark) 100%);
+  }
+  .orb-2 {
+    width: 180px; height: 180px;
+    bottom: 12%; right: 8%;
+    background: linear-gradient(135deg, var(--panel-2) 0%, var(--panel) 100%);
+  }
+  .orb-name { font-size: 11px; color: var(--ink-3); margin-bottom: 6px; }
+  .orb-stat { font-size: 28px; font-weight: 700; color: white; }
+  .orb-sub { font-size: 11px; color: var(--green-light); margin-top: 4px; }
+  .orb-link {
+    position: absolute;
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--green) 50%, transparent 100%);
+    top: 50%; left: 20%;
+    transform: rotate(-25deg);
+  }
+  .orb-link::before {
+    content: '?'; position: absolute;
+    top: -16px; left: 50%; transform: translateX(-50%);
+    color: var(--amber); font-weight: 700; font-size: 14px;
+    background: var(--bg); padding: 0 10px;
+  }
+
+  /* SECTION HEADERS */
+  .section-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--green-light);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  h2 {
+    font-size: 34px; font-weight: 700;
+    color: white; letter-spacing: -0.02em;
+    line-height: 1.15; margin-bottom: 16px;
+    max-width: 800px;
+  }
+  h2 em {
+    color: var(--green-light); font-style: normal;
+  }
+  h2 .accent-red { color: var(--red); font-style: normal; }
+  .section-lead {
+    font-size: 17px; color: var(--ink-3);
+    max-width: 720px; margin-bottom: 40px;
+  }
+
+  /* KPI GRID */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .kpi-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px 24px;
+    position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%; background: var(--green);
+  }
+  .kpi-card.red::before { background: var(--red); }
+  .kpi-card.amber::before { background: var(--amber); }
+  .kpi-label {
+    font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-weight: 600; margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-size: 32px; font-weight: 700; color: white;
+    line-height: 1; margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+  .kpi-delta {
+    font-size: 12px; color: var(--ink-3);
+  }
+  .kpi-delta.up { color: var(--green-light); }
+  .kpi-delta.down { color: var(--red); }
+
+  /* DOMAIN COMPARISON */
+  .domain-compare {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 32px;
+  }
+  .domain-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 28px;
+    position: relative;
+  }
+  .domain-card.winner {
+    border-color: rgba(29, 158, 117, 0.4);
+    background: linear-gradient(135deg, var(--panel) 0%, rgba(29, 158, 117, 0.06) 100%);
+  }
+  .domain-card.loser {
+    border-color: rgba(240, 133, 133, 0.25);
+  }
+  .domain-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .domain-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; font-weight: 600; color: white;
+  }
+  .domain-badge {
+    font-size: 11px; padding: 4px 10px;
+    border-radius: 4px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge-green {
+    background: var(--green-soft); color: var(--green-light);
+    border: 1px solid rgba(29, 158, 117, 0.3);
+  }
+  .badge-red {
+    background: rgba(240, 133, 133, 0.1); color: var(--red);
+    border: 1px solid rgba(240, 133, 133, 0.25);
+  }
+  .domain-stats {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .domain-stat-label {
+    font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .domain-stat-value {
+    font-size: 22px; font-weight: 700; color: white;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .domain-stat-trend {
+    font-size: 11px; margin-top: 4px;
+  }
+  .trend-down { color: var(--red); }
+  .trend-up { color: var(--green-light); }
+
+  /* INSIGHT BOX */
+  .insight {
+    background: linear-gradient(135deg, var(--panel-2) 0%, var(--panel) 100%);
+    border: 1px solid var(--line);
+    border-radius: 16px; padding: 32px;
+    margin-top: 32px;
+    border-left: 4px solid var(--amber);
+  }
+  .insight-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--amber);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .insight h3 {
+    font-size: 22px; font-weight: 700; color: white;
+    margin-bottom: 14px; letter-spacing: -0.01em;
+  }
+  .insight p {
+    color: var(--ink-2); line-height: 1.65;
+    max-width: 800px;
+  }
+  .insight.green { border-left-color: var(--green); }
+  .insight.green .insight-tag { color: var(--green-light); }
+
+  /* CHART CARDS */
+  .charts-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 32px;
+  }
+  .chart-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 24px;
+  }
+  .chart-card h4 {
+    font-size: 14px; color: white; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .chart-card .chart-sub {
+    font-size: 12px; color: var(--ink-3);
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chart-wrapper { height: 220px; position: relative; }
+
+  /* KEYWORD TABLE */
+  .keyword-section {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 32px;
+    margin-top: 32px;
+  }
+  .keyword-section h3 {
+    color: white; font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .keyword-section .kw-sub {
+    font-size: 13px; color: var(--ink-3);
+    margin-bottom: 24px;
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px;
+  }
+  th {
+    text-align: left; font-weight: 600;
+    font-size: 11px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  th.center, td.center { text-align: center; }
+  th.right, td.right { text-align: right; }
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-2);
+  }
+  td.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  td.kw { color: white; font-weight: 500; }
+  .pill {
+    display: inline-block;
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pill-1 { background: var(--green-soft); color: var(--green-light); }
+  .pill-2 { background: rgba(111, 174, 236, 0.12); color: var(--blue); }
+  .pill-3 { background: rgba(245, 195, 97, 0.12); color: var(--amber); }
+  .pill-4 { background: rgba(240, 133, 133, 0.12); color: var(--red); }
+
+  /* SCENARIOS */
+  .scenarios {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-top: 32px;
+  }
+  .scenario {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 28px;
+    position: relative;
+  }
+  .scenario.recommended {
+    border-color: var(--green);
+    background: linear-gradient(160deg, var(--panel) 0%, rgba(29, 158, 117, 0.08) 100%);
+  }
+  .scenario-tag {
+    display: inline-block; font-size: 10px;
+    padding: 3px 8px; border-radius: 4px;
+    background: var(--line); color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    font-weight: 600; margin-bottom: 14px;
+  }
+  .scenario.recommended .scenario-tag {
+    background: var(--green); color: var(--green-dark);
+  }
+  .scenario h3 {
+    font-size: 19px; font-weight: 700; color: white;
+    margin-bottom: 10px; letter-spacing: -0.01em;
+  }
+  .scenario p {
+    font-size: 13.5px; color: var(--ink-3);
+    line-height: 1.6; margin-bottom: 18px;
+  }
+  .scenario ul {
+    list-style: none; padding: 0;
+  }
+  .scenario li {
+    font-size: 13px; color: var(--ink-2);
+    padding: 6px 0 6px 22px;
+    position: relative;
+  }
+  .scenario li.pro::before {
+    content: '+'; position: absolute; left: 0; top: 6px;
+    color: var(--green-light); font-weight: 700;
+  }
+  .scenario li.con::before {
+    content: '−'; position: absolute; left: 0; top: 6px;
+    color: var(--red); font-weight: 700;
+  }
+
+  /* APPROACH / TIMELINE */
+  .timeline {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 40px;
+    margin-top: 32px;
+  }
+  .timeline-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; position: relative;
+  }
+  .timeline-grid::before {
+    content: ''; position: absolute;
+    top: 18px; left: 5%; right: 5%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 50%, var(--green) 100%);
+    z-index: 0;
+  }
+  .timeline-step {
+    position: relative; z-index: 1;
+    text-align: left;
+  }
+  .timeline-dot {
+    width: 36px; height: 36px;
+    background: var(--bg);
+    border: 2px solid var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700; color: var(--green-light);
+    margin-bottom: 18px;
+  }
+  .timeline-step h4 {
+    color: white; font-size: 15px;
+    font-weight: 600; margin-bottom: 6px;
+  }
+  .timeline-step p {
+    color: var(--ink-3); font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* INVESTMENT */
+  .investment {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--panel) 100%);
+    border: 1px solid rgba(29, 158, 117, 0.3);
+    border-radius: 20px; padding: 48px;
+    margin-top: 32px;
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 48px; align-items: center;
+  }
+  .invest-list {
+    list-style: none;
+  }
+  .invest-list li {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between;
+    align-items: center;
+  }
+  .invest-list li:last-child { border-bottom: none; }
+  .invest-name { color: white; font-weight: 500; font-size: 14px; }
+  .invest-desc { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+  .invest-price {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green-light); font-weight: 600;
+    font-size: 14px; white-space: nowrap;
+  }
+  .invest-total {
+    text-align: center;
+  }
+  .invest-total-label {
+    font-size: 12px; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .invest-total-value {
+    font-size: 64px; font-weight: 800; color: white;
+    line-height: 1; letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .invest-total-sub {
+    font-size: 12px; color: var(--ink-3); margin-top: 14px;
+  }
+  .invest-cta {
+    margin-top: 24px;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green); color: var(--green-dark);
+    padding: 14px 24px; border-radius: 8px;
+    font-weight: 700; font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .invest-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(29, 158, 117, 0.3);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 48px;
+    text-align: center;
+    margin-top: 80px;
+  }
+  .footer-contact {
+    display: flex; justify-content: center; gap: 32px;
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .footer-contact a {
+    color: var(--green-light); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+  }
+  .footer-meta {
+    font-size: 12px; color: var(--ink-4);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* SOURCE NOTE */
+  .source {
+    font-size: 11px; color: var(--ink-4);
+    font-style: italic; margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    main { padding: 32px 24px 80px; }
+    .hero { grid-template-columns: 1fr; gap: 32px; }
+    .hero-visual { max-width: 360px; margin: 0 auto; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 26px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .domain-compare { grid-template-columns: 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+    .scenarios { grid-template-columns: 1fr; }
+    .timeline-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .timeline-grid::before { display: none; }
+    .investment { grid-template-columns: 1fr; padding: 32px 24px; }
+    header { padding: 14px 24px; }
+    .header-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">C</div>
+    Conversal · Intelligence
+  </div>
+  <div class="header-meta">
+    Renovaut · Domeinstrategie · <span>v1.0</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-tag">Strategische analyse</div>
+      <h1>Twee domeinen, één merk.<br><em>Tijd om te kiezen.</em></h1>
+      <p class="hero-lead">
+        Renovaut zet vandaag in op twee domeinen die elkaar overlappen in keywords, doelgroep en regio. Op basis van de data analyseren we de huidige situatie en stellen we een consolidatiestrategie voor naar één sterk domein: <strong style="color:white">renovaut.be</strong>.
+      </p>
+    </div>
+    <div class="hero-visual">
+      <div class="domain-orb orb-1">
+        <div class="orb-name">renovaut.be</div>
+        <div class="orb-stat">68</div>
+        <div class="orb-sub">DA 8 · 547 backlinks</div>
+      </div>
+      <div class="orb-link"></div>
+      <div class="domain-orb orb-2">
+        <div class="orb-name">slotenmaker-evergem.be</div>
+        <div class="orb-stat">241</div>
+        <div class="orb-sub">DA 6 · 220 backlinks</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SITUATIE -->
+  <section>
+    <div class="section-tag">01 · DE HUIDIGE SITUATIE</div>
+    <h2>Renovaut bouwde autoriteit op één domein, en verkeer op een ander.</h2>
+    <p class="section-lead">
+      Het hoofdmerk renovaut.be heeft het meeste linkprofiel en domeinautoriteit. Maar de bezoekers komen vandaag binnen via slotenmaker-evergem.be, een exact-match domein met minder autoriteit maar meer organisch verkeer. Beide ranken op dezelfde keywords. De vraag is niet welk domein beter werkt, maar wat je verliest door ze gescheiden te houden.
+    </p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Totaal organisch verkeer</div>
+        <div class="kpi-value">309</div>
+        <div class="kpi-delta">renovaut.be + slotenmaker-evergem.be</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Renovaut.be verkeer</div>
+        <div class="kpi-value">68</div>
+        <div class="kpi-delta down">↓ van piek 430+ in nov 2024</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Slotenmaker-evergem.be</div>
+        <div class="kpi-value">241</div>
+        <div class="kpi-delta up">↑ van 120 in apr 2025</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-label">Backlink-discrepantie</div>
+        <div class="kpi-value">2,5×</div>
+        <div class="kpi-delta">meer backlinks op het minder presterende domein</div>
+      </div>
+    </div>
+
+    <p class="source">Bron: Ubersuggest export mei 2026. Exacte volumes kunnen afwijken van Google Search Console.</p>
+  </section>
+
+  <!-- DOMEINEN VERGELIJKEN -->
+  <section>
+    <div class="section-tag">02 · DE PARADOX</div>
+    <h2>Het hoofdmerk heeft de autoriteit. Het sub-domein heeft het verkeer.</h2>
+    <p class="section-lead">
+      Een vergelijking van beide domeinen toont een klassiek beeld bij merkversnippering: het ene domein doet investeringen (links, leeftijd, brand), het andere oogst de zichtbaarheid. Voor Google staan ze los van elkaar.
+    </p>
+
+    <div class="domain-compare">
+      <div class="domain-card loser">
+        <div class="domain-header">
+          <div class="domain-name">renovaut.be</div>
+          <div class="domain-badge badge-red">Onderbenut hoofdmerk</div>
+        </div>
+        <div class="domain-stats">
+          <div>
+            <div class="domain-stat-label">Organisch verkeer</div>
+            <div class="domain-stat-value">68/mnd</div>
+            <div class="domain-stat-trend trend-down">↓ piek 430+ verloren</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Domain Authority</div>
+            <div class="domain-stat-value">8</div>
+            <div class="domain-stat-trend">stabiel</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Keywords</div>
+            <div class="domain-stat-value">60</div>
+            <div class="domain-stat-trend">gedaald</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Backlinks</div>
+            <div class="domain-stat-value">547</div>
+            <div class="domain-stat-trend trend-up">sterk linkprofiel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-card winner">
+        <div class="domain-header">
+          <div class="domain-name">slotenmaker-evergem.be</div>
+          <div class="domain-badge badge-green">Verkeerwinner</div>
+        </div>
+        <div class="domain-stats">
+          <div>
+            <div class="domain-stat-label">Organisch verkeer</div>
+            <div class="domain-stat-value">241/mnd</div>
+            <div class="domain-stat-trend trend-up">↑ stijgend sinds okt 2025</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Domain Authority</div>
+            <div class="domain-stat-value">6</div>
+            <div class="domain-stat-trend">groeiend</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Keywords</div>
+            <div class="domain-stat-value">111</div>
+            <div class="domain-stat-trend trend-up">bijna 2× meer</div>
+          </div>
+          <div>
+            <div class="domain-stat-label">Backlinks</div>
+            <div class="domain-stat-value">220</div>
+            <div class="domain-stat-trend">120 nofollow</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-tag">⚠ Keyword-kannibalisme</div>
+      <h3>Beide domeinen ranken voor "slotenmaker evergem". Allebei op pagina 1.</h3>
+      <p>
+        Op het keyword <strong style="color:white">slotenmaker evergem</strong> (110 zoekopdrachten/maand) staat slotenmaker-evergem.be op positie 1 (57 bezoeken/mnd) en renovaut.be op positie 2 (18 bezoeken/mnd). Op <strong style="color:white">renovaut slotenmaker</strong> idem: positie 1 (32) versus positie 2 (5). Google verdeelt het verkeer over twee versies van hetzelfde merk in plaats van één geconsolideerd resultaat te tonen. Het netto-effect is verloren zichtbaarheid voor andere queries.
+      </p>
+    </div>
+
+    <p class="source">Bron: Ubersuggest export 20 mei 2026 — beide domeinen.</p>
+  </section>
+
+  <!-- TRAFFIC EVOLUTIE -->
+  <section>
+    <div class="section-tag">03 · DE TRAFFIC-EVOLUTIE</div>
+    <h2>Twee tegengestelde grafieken die hetzelfde merk vertegenwoordigen.</h2>
+    <p class="section-lead">
+      Wanneer je de verkeerevolutie van beide domeinen naast elkaar zet, zie je een spiegelpatroon: renovaut.be daalt sinds eind 2024, slotenmaker-evergem.be groeit sinds eind 2025. Mogelijke verklaringen voor de daling op renovaut.be zijn onder meer Google-algoritmewijzigingen, verschuiving van zoekgedrag richting AI-tools (ChatGPT, AI Overviews), of het feit dat slotenmaker-evergem.be hetzelfde verkeer aantrekt op exact-match domein.
+    </p>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h4>renovaut.be — organisch verkeer</h4>
+        <div class="chart-sub">mei 2024 → mei 2026</div>
+        <div class="chart-wrapper"><canvas id="chart-renovaut"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>slotenmaker-evergem.be — organisch verkeer</h4>
+        <div class="chart-sub">apr 2025 → mei 2026</div>
+        <div class="chart-wrapper"><canvas id="chart-evergem"></canvas></div>
+      </div>
+    </div>
+
+    <p class="source">Bron: Ubersuggest. Indicatieve cijfers, te valideren in GSC/GA4.</p>
+  </section>
+
+  <!-- KEYWORDS -->
+  <section>
+    <div class="section-tag">04 · DE TOP KEYWORDS</div>
+    <h2>Op de belangrijkste zoekwoorden concurreren beide domeinen <em>met elkaar</em>.</h2>
+    <p class="section-lead">
+      De top-keywords van beide domeinen overlappen voor een groot deel. Door te consolideren naar één domein vermijd je dat Google twee versies van hetzelfde merk indexeert, en breng je het hele linkprofiel achter één URL te staan.
+    </p>
+
+    <div class="keyword-section">
+      <h3>Keyword-overlap renovaut.be ↔ slotenmaker-evergem.be</h3>
+      <p class="kw-sub">Lokale en merkgebonden keywords waar beide domeinen op ranken.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th class="center">Volume/mnd</th>
+            <th class="center">Positie renovaut.be</th>
+            <th class="center">Positie slotenmaker-evergem.be</th>
+            <th class="right">Totaal bezoeken</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="kw">slotenmaker evergem</td>
+            <td class="center mono">110</td>
+            <td class="center"><span class="pill pill-2">#2 · 18</span></td>
+            <td class="center"><span class="pill pill-1">#1 · 57</span></td>
+            <td class="right mono">75</td>
+          </tr>
+          <tr>
+            <td class="kw">renovaut</td>
+            <td class="center mono">90</td>
+            <td class="center"><span class="pill pill-1">#1 · 25</span></td>
+            <td class="center"><span class="pill pill-4">niet gerankt</span></td>
+            <td class="right mono">25</td>
+          </tr>
+          <tr>
+            <td class="kw">renovaut slotenmaker</td>
+            <td class="center mono">90</td>
+            <td class="center"><span class="pill pill-2">#2 · 5</span></td>
+            <td class="center"><span class="pill pill-1">#1 · 32</span></td>
+            <td class="right mono">37</td>
+          </tr>
+          <tr>
+            <td class="kw">slotenmaker in de buurt</td>
+            <td class="center mono">1.600</td>
+            <td class="center"><span class="pill pill-4">#17 · 2</span></td>
+            <td class="center"><span class="pill pill-3">#7 · 13</span></td>
+            <td class="right mono">15</td>
+          </tr>
+          <tr>
+            <td class="kw">slotenmaker zelzate</td>
+            <td class="center mono">90</td>
+            <td class="center"><span class="pill pill-4">#15 · 1</span></td>
+            <td class="center"><span class="pill pill-3">#3 · 6</span></td>
+            <td class="right mono">7</td>
+          </tr>
+          <tr>
+            <td class="kw">slotenmaker eeklo</td>
+            <td class="center mono">260</td>
+            <td class="center"><span class="pill pill-4">niet gerankt</span></td>
+            <td class="center"><span class="pill pill-3">#4 · 7</span></td>
+            <td class="right mono">7</td>
+          </tr>
+          <tr>
+            <td class="kw">slot kapot</td>
+            <td class="center mono">110</td>
+            <td class="center"><span class="pill pill-4">#45 · 0</span></td>
+            <td class="center"><span class="pill pill-2">#3 · 10</span></td>
+            <td class="right mono">10</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight green">
+      <div class="insight-tag">💡 Kans bij consolidatie</div>
+      <h3>Eén domein dat alle 111 keywords erft, met het linkprofiel van 547 backlinks.</h3>
+      <p>
+        Bij een gecontroleerde migratie van slotenmaker-evergem.be naar renovaut.be (via 301-redirects op URL-niveau) gaat de keyword-positionering mee, en versterkt het bestaande linkprofiel van renovaut.be het ranking-potentieel. Het netto effect: het verkeer dat vandaag verdeeld is over twee domeinen komt onder één merk samen, met meer ruimte om in te zetten op generieke keywords zoals "slotenmaker in de buurt" (1.600 zoekopdrachten/mnd).
+      </p>
+    </div>
+
+    <p class="source">Bron: Ubersuggest keyword export 20 mei 2026. Positionering kan dag op dag verschillen.</p>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section>
+    <div class="section-tag">05 · DRIE SCENARIO'S</div>
+    <h2>Welke richting kiest Renovaut?</h2>
+    <p class="section-lead">
+      Een domeinstrategie kent in deze situatie drie mogelijke richtingen. Elke optie heeft een eigen logica en eigen risico's. Onze aanbeveling staat in het midden — niet omdat het de veiligste keuze is, maar omdat het meest klopt met hoe Renovaut zich vandaag al positioneert.
+    </p>
+
+    <div class="scenarios">
+      <div class="scenario">
+        <span class="scenario-tag">Optie A</span>
+        <h3>Niets veranderen</h3>
+        <p>Beide domeinen blijven actief en onafhankelijk.</p>
+        <ul>
+          <li class="pro">Geen migratierisico</li>
+          <li class="pro">Slotenmaker-evergem.be blijft groeien</li>
+          <li class="con">Keyword-kannibalisme blijft bestaan</li>
+          <li class="con">Renovaut.be blijft dalend en autoriteit gaat verloren</li>
+          <li class="con">Twee sites onderhouden = dubbele kost</li>
+        </ul>
+      </div>
+
+      <div class="scenario recommended">
+        <span class="scenario-tag">Aanbevolen</span>
+        <h3>Consolideren naar renovaut.be</h3>
+        <p>Slotenmaker-evergem.be migreert volledig naar renovaut.be via 301-redirects.</p>
+        <ul>
+          <li class="pro">Eén sterk merk, één URL, één indexatie</li>
+          <li class="pro">Linkprofiel van 547 backlinks blijft op hoofddomein</li>
+          <li class="pro">Volledige keyword-set komt samen onder renovaut.be</li>
+          <li class="pro">Lagere onderhoudskost, snellere doorontwikkeling</li>
+          <li class="con">Tijdelijke ranking-fluctuatie in eerste 4-8 weken</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <span class="scenario-tag">Optie C</span>
+        <h3>Omgekeerd consolideren</h3>
+        <p>Renovaut.be migreert naar slotenmaker-evergem.be.</p>
+        <ul>
+          <li class="pro">Behoud van het beter presterende domein</li>
+          <li class="con">Hoofdmerk verdwijnt achter een service-naam</li>
+          <li class="con">Sterk linkprofiel (547) verhuist naar zwakker domein</li>
+          <li class="con">Beperkt uitbreidbaar (renovaut doet ook schrijnwerk)</li>
+          <li class="con">Branding-impact: verlies van naamsbekendheid</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-tag">⚠ Belangrijke nuance</div>
+      <h3>Een domeinmigratie is nooit risicovrij. Daarom doen we er een analyse aan vooraf.</h3>
+      <p>
+        De Intelligence-fase brengt de huidige situatie technisch en strategisch in kaart, voordat er één URL verandert. Dat omvat: een volledige URL-mapping tussen de twee sites, een audit van het bestaande linkprofiel (welke 547 backlinks tellen écht mee), een keyword-strategie voor het samengevoegde domein, en een redirectplan dat de ranking-positionering bewaart. Pas daarna start de uitvoering. De aanpak is dezelfde als bij Carloma, Rantour en Idelco.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-contact">
+    <a href="mailto:steven@conversal.be">steven@conversal.be</a>
+    <a href="tel:+32478951223">0478 95 12 23</a>
+    <a href="https://steven.conversal.be">steven.conversal.be</a>
+  </div>
+  <div class="footer-meta">Conversal · Digital Intelligence Agency · Affligem</div>
+</footer>
+
+<script>
+  Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+  Chart.defaults.color = '#8FA39D';
+  Chart.defaults.borderColor = '#1F2C28';
+
+  // Renovaut.be — sterke daling
+  new Chart(document.getElementById('chart-renovaut'), {
+    type: 'line',
+    data: {
+      labels: ['mei 24', 'jul 24', 'sep 24', 'nov 24', 'jan 25', 'mrt 25', 'mei 25', 'jul 25', 'sep 25', 'nov 25', 'jan 26', 'mrt 26', 'mei 26'],
+      datasets: [{
+        label: 'Organisch verkeer',
+        data: [140, 300, 180, 430, 280, 160, 200, 170, 140, 70, 60, 70, 68],
+        borderColor: '#F08585',
+        backgroundColor: 'rgba(240, 133, 133, 0.1)',
+        borderWidth: 2,
+        tension: 0.35,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointBackgroundColor: '#F08585'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 6 } },
+        y: { grid: { color: '#1F2C28', drawBorder: false }, ticks: { font: { size: 10 } }, beginAtZero: true }
+      }
+    }
+  });
+
+  // Slotenmaker-evergem.be — stijgend
+  new Chart(document.getElementById('chart-evergem'), {
+    type: 'line',
+    data: {
+      labels: ['apr 25', 'mei 25', 'jun 25', 'jul 25', 'aug 25', 'sep 25', 'okt 25', 'nov 25', 'dec 25', 'jan 26', 'feb 26', 'mrt 26', 'apr 26', 'mei 26'],
+      datasets: [{
+        label: 'Organisch verkeer',
+        data: [120, 125, 120, 110, 115, 140, 150, 225, 255, 170, 215, 225, 240, 241],
+        borderColor: '#5FD1A4',
+        backgroundColor: 'rgba(95, 209, 164, 0.12)',
+        borderWidth: 2,
+        tension: 0.35,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointBackgroundColor: '#5FD1A4'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 6 } },
+        y: { grid: { color: '#1F2C28', drawBorder: false }, ticks: { font: { size: 10 } }, beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
